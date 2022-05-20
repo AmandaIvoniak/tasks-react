@@ -1,18 +1,27 @@
-import React, { useState } from 'react';
-import Botao from '../components/Buttons';
-import { Cronometro } from '../components/Cronometro';
+import { useState } from 'react';
+import Cronometro from '../components/Cronometro';
 import Form from '../components/Forms'
 import List from '../components/List';
 import { ITarefa } from '../types/tarefa';
 import style from './App.module.scss';
+
 function App() {
   const [tarefas, setTarefas] = useState<ITarefa[]>([]);
+  const [selecionado, setSelecionado] = useState<ITarefa>();
 
+  function selecionaTarefa(tarefaSelecionada: ITarefa) {
+    setSelecionado(tarefaSelecionada);
+    setTarefas(tarefasAnteriores => tarefasAnteriores.map(tarefa => ({
+      ...tarefa,
+      selecionado: tarefa.id === tarefaSelecionada.id ? true : false
+
+    })));
+  }
   return (
     <div className={style.AppStyle}>
-      <Form setTarefas={setTarefas}/>
-      <List tarefas={tarefas}/>
-      <Cronometro />
+      <Form setTarefas={setTarefas} />
+      <List tarefas={tarefas} selecionaTarefa={selecionaTarefa} />
+      <Cronometro selecionado={selecionado} />
     </div>
   );
 }
